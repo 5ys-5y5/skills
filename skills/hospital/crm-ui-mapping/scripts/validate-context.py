@@ -6,22 +6,69 @@ import json
 from pathlib import Path
 import sys
 
-try:
-    from jsonschema import Draft202012Validator
-except ImportError:
-    print(json.dumps({'status': 'blocked', 'errors': ['Install scripts/requirements.txt in the execution environment']}))
-    sys.exit(2)
-
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOWS = {'patient-lookup', 'appointment-manage', 'visit-check-in', 'billing-lookup', 'contact-record'}
+
+
+def schema_errors(schema, value, path=''):
+    """Validate the keyword subset used by bundled schemas; fail closed on others.
+
+    This is not a general JSON Schema implementation and never resolves URLs.
+    """
+    if isinstance(schema, bool):
+        return [] if schema else [path + ' (false schema)']
+    supported = {'$schema', 'title', 'description', 'type', 'enum', 'required',
+                 'properties', 'additionalProperties', 'items', 'uniqueItems',
+                 'minLength', 'minimum', 'anyOf'}
+    if set(schema) - supported:
+        return [path + ' (unsupported schema keyword)']
+    types = {
+        'object': isinstance(value, dict), 'array': isinstance(value, list),
+        'string': isinstance(value, str), 'boolean': isinstance(value, bool),
+        'integer': isinstance(value, int) and not isinstance(value, bool),
+        'number': isinstance(value, (int, float)) and not isinstance(value, bool),
+        'null': value is None,
+    }
+    expected = schema.get('type')
+    if expected is not None:
+        expected = [expected] if isinstance(expected, str) else expected
+        if not any(types.get(kind, False) for kind in expected):
+            return [path + ' (type)']
+    errors = []
+    if 'enum' in schema and value not in schema['enum']:
+        errors.append(path + ' (enum)')
+    if 'anyOf' in schema and not any(not schema_errors(part, value, path) for part in schema['anyOf']):
+        errors.append(path + ' (anyOf)')
+    if isinstance(value, dict):
+        for key in schema.get('required', []):
+            if key not in value:
+                errors.append(path + '.' + key + ' (required)')
+        properties = schema.get('properties', {})
+        additional = schema.get('additionalProperties', True)
+        for key, item in value.items():
+            if key in properties:
+                errors.extend(schema_errors(properties[key], item, path + '.' + key))
+            elif additional is False:
+                errors.append(path + '.' + key + ' (additionalProperties)')
+            elif isinstance(additional, dict):
+                errors.extend(schema_errors(additional, item, path + '.' + key))
+    if isinstance(value, list):
+        if schema.get('uniqueItems') and len({json.dumps(item, sort_keys=True) for item in value}) != len(value):
+            errors.append(path + ' (uniqueItems)')
+        if 'items' in schema:
+            for index, item in enumerate(value):
+                errors.extend(schema_errors(schema['items'], item, path + '.' + str(index)))
+    if isinstance(value, str) and len(value) < schema.get('minLength', 0):
+        errors.append(path + ' (minLength)')
+    if types['number'] and 'minimum' in schema and value < schema['minimum']:
+        errors.append(path + ' (minimum)')
+    return errors
 
 
 def check(data, phase, now=None):
     errors = []
     schema = json.loads((ROOT / 'references/context.schema.json').read_text())
-    for error in Draft202012Validator(schema).iter_errors(data):
-        # Report paths and constraints, not private input values.
-        errors.append('schema: ' + '.'.join(map(str, error.absolute_path)) + ' (' + str(error.validator) + ')')
+    errors.extend('schema: ' + error for error in schema_errors(schema, data))
     if errors:
         return 'mapping_required' if phase == 'mapping' else 'blocked', errors
     profile, request = data['profile'], data['request']
@@ -92,8 +139,7 @@ def check(data, phase, now=None):
         if not isinstance(result, dict) or not result_fields:
             return 'blocked', ['Missing result or requested result_fields']
         result_schema = json.loads((ROOT / 'references/workflows' / workflow / 'result.schema.json').read_text())
-        for error in Draft202012Validator(result_schema).iter_errors(result):
-            errors.append('result schema: ' + '.'.join(map(str, error.absolute_path)) + ' (' + str(error.validator) + ')')
+        errors.extend('result schema: ' + error for error in schema_errors(result_schema, result))
         for key in set(result_fields) | set(operation.get('result_required', [])):
             value = result.get(key)
             if value is None or (isinstance(value, str) and not value.strip()):
@@ -155,7 +201,7 @@ def check(data, phase, now=None):
             if value is None or (isinstance(value, str) and not value.strip()):
                 errors.append('Missing input value: ' + key)
             input_schema = operation.get('input_schemas', {}).get(key)
-            if input_schema and not Draft202012Validator(input_schema).is_valid(value):
+            if input_schema and schema_errors(input_schema, value):
                 errors.append('input schema: ' + key)
     return ('blocked', errors) if errors else ('ready', [])
 

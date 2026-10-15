@@ -20,5 +20,4 @@ jobs:
       - run: python3 scripts/validate-skills.py
       - run: python3 scripts/validate-skills.py --packaging
       - run: python3 scripts/test-validation.py
-      - run: python3 -m pip install -r skills/hospital/crm-ui-mapping/scripts/requirements.txt
       - run: python3 scripts/test-hospital-gate.py

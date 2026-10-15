@@ -2,7 +2,7 @@
 
 ## 필수 선행조건
 
-이 문서를 직접 요청받아도 먼저 상위 진입점의 매핑·호출 검증 절차를 따른다. [선행 검증](../../prerequisites.md)과 이 업무의 contract.json으로 mapping_valid를 확인한 후에만 업무를 시작하고, 실제 조작은 매번 action 검증의 ready 이후에 수행한다. 결과는 result.schema.json과 요청한 result_fields로 검증한다. 필수 XPath나 값이 없으면 업무를 진행하지 않고 매핑 정의로 돌아간다.
+이 문서를 직접 요청받아도 먼저 상위 진입점의 매핑·호출 검증 절차를 따른다. [선행 검증](../../prerequisites.md)과 이 업무의 contract.json으로 mapping_valid를 확인한 후에만 업무를 시작하고, 실제 조작은 매번 action 검증의 ready 이후에 수행한다. 결과는 result.schema.json과 요청한 result_fields로 검증한다. 필수 XPath나 값이 없으면 매핑 정의로 돌아간다. 이 조건은 매핑 준비에 필요한 페이지 열기·로그인·화면 탐색을 막지 않는다. 스크립트 실행 환경이 없어도 문서의 동일 검증 항목을 직접 대조할 수 있다.
 
 ## 시작할 때
 

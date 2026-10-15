@@ -92,7 +92,6 @@ python3 -m venv .venv
 bash scripts/list-skills.sh
 .venv/bin/python scripts/validate-skills.py
 .venv/bin/python scripts/test-validation.py
-.venv/bin/python -m pip install -r skills/hospital/crm-ui-mapping/scripts/requirements.txt
 .venv/bin/python scripts/test-hospital-gate.py
 # 제품별 패키지 유지보수 시에만 추가 검사
 .venv/bin/python scripts/validate-skills.py --packaging
@@ -117,3 +116,5 @@ Chrome DevTools 항목은 연결된 MCP 서버를 사용하는 공식 문서다.
 .agents/는 저장소 유지보수 규칙이다. 서비스의 설정·인증·캐시·문서 공급 구현은 이 저장소에 포함하지 않는다. 실제 업무 검증 완료를 뜻하지 않으며 자체 문서에 별도 공개 재배포 라이선스를 부여하지 않았다.
 
 병원 진입점·하위 자료 구조는 표준의 단계적 로딩을 사용한다. 표준에는 스킬 간 자동 선행 실행이나 README 우선 실행 규정이 없다. 따라서 하위 업무를 별도 SKILL.md로 광고하지 않는다. 필수 실행 차단을 보장하려면 소비 런타임이 실제 조작 전에 검증 결과를 연결해야 한다. 검증 스크립트만으로 다른 런타임의 도구 호출을 가로챌 수는 없다.
+
+병원 매핑 준비는 문서를 읽으면 CRM 접근·필요한 로그인·XPath 지정부터 시작한다. 완성된 매핑이나 검증기 설치를 준비 단계의 선행조건으로 두지 않는다. 제공 검증기는 Python 표준 라이브러리만 사용하며 실행할 수 없는 환경에서는 에이전트가 문서의 동일 조건을 직접 확인한다. 업무 실행의 필수 검증은 유지한다.

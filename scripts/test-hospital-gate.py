@@ -29,8 +29,9 @@ def payload():
 
 
 class GateTests(unittest.TestCase):
-    def run_gate(self, data, phase='action'):
-        result = subprocess.run([sys.executable, str(SCRIPT), '--phase', phase],
+    def run_gate(self, data, phase='action', isolated=False):
+        command = [sys.executable] + (['-S'] if isolated else [])
+        result = subprocess.run(command + [str(SCRIPT), '--phase', phase],
                                 input=json.dumps(data), capture_output=True, text=True)
         self.assertTrue(result.stdout.strip(), result.stderr)
         return result.returncode, json.loads(result.stdout)
@@ -44,6 +45,31 @@ class GateTests(unittest.TestCase):
         code, result = self.run_gate(payload())
         self.assertEqual(code, 0, result)
         self.assertEqual(result['status'], 'ready')
+
+    def test_runs_without_third_party_packages(self):
+        code, result = self.run_gate(payload(), isolated=True)
+        self.assertEqual(code, 0, result)
+        self.assertEqual(result['status'], 'ready')
+
+    def test_dependency_free_schema_rejects_bad_data(self):
+        for key, value in [('required', 'true'), ('role', 'unknown'), ('description', '')]:
+            data = payload()
+            data['profile']['fields']['billing.balance'][key] = value
+            code, result = self.run_gate(data, isolated=True)
+            self.assertNotEqual(code, 0, result)
+            self.assertIn('schema', ' '.join(result['errors']))
+        data = payload()
+        data['request']['targets'].append('billing.balance')
+        code, result = self.run_gate(data, isolated=True)
+        self.assertNotEqual(code, 0, result)
+
+    def test_boolean_is_not_a_numeric_balance(self):
+        data = payload()
+        data['request']['result_fields'] = ['balance']
+        data['result'] = {'patient_id': 'p', 'bill_id': 'b', 'balance': True}
+        code, result = self.run_gate(data, 'result', isolated=True)
+        self.assertNotEqual(code, 0, result)
+        self.assertIn('result schema', ' '.join(result['errors']))
 
     def test_missing_mapping_routes_to_mapping(self):
         data = payload()
