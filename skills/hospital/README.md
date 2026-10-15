@@ -2,16 +2,14 @@
 
 ## Model-invoked
 
-- [patient-lookup](patient-lookup/SKILL.md): 환자 검색과 요청한 정보 조회.
-- [appointment-manage](appointment-manage/SKILL.md): 가용 시간과 예약 조회, 신규·변경·취소.
-- [visit-check-in](visit-check-in/SKILL.md): 당일 도착과 접수.
-- [billing-lookup](billing-lookup/SKILL.md): 진료비·미수금·이미 발급된 영수증 조회.
-- [contact-record](contact-record/SKILL.md): 상담 기록과 직원 콜백 요청 등록.
+- [crm-ui-mapping](crm-ui-mapping/SKILL.md): 병원 업무 전체의 진입점. 필수 XPath·값·선행 관계 검증 후 선택 업무만 수행.
 
-업무 샘플이며 실제 CRM 검증 완료를 뜻하지 않는다. 호출 에이전트가 자신의 환경에서 접속 정보·권한·사용 가능한 도구를 확인한다.
+현재 CRM에서 실제 요청을 처리하는 업무 지침이다. 호출 에이전트가 자신의 환경에서 접속 정보·권한·사용 가능한 도구를 확인한다. 특정 CRM 페이지나 고정 XPath를 전제하지 않는다.
 
-## 업무 검증
+## 화면 대응과 실행
 
-각 항목의 테스트 환경 시나리오: [환자 조회](patient-lookup/references/validation.md), [예약 관리](appointment-manage/references/validation.md), [내원·접수](visit-check-in/references/validation.md), [수납 조회](billing-lookup/references/validation.md), [상담 기록](contact-record/references/validation.md).
+환자·예약·접수·청구·상담 업무는 모두 crm-ui-mapping을 통해 진입한다. 초기 카탈로그에는 이 스킬의 이름·설명만 제공하고, 선택한 업무의 계약으로 필수 매핑을 확인한 후에만 그 업무 본문을 읽는다. 병원별 XPath·실제 값은 에이전트가 자신의 환경에서 보관한다. 이 README는 안내이며 런타임이 자동 실행하는 진입점이 아니다.
 
-시나리오는 합격 기준이며 실행 결과가 아니다. 테스트용 합성 데이터와 권한이 있는 환경에서만 실행한다. 판단 검사는 선택한 SKILL.md와 시나리오의 요청·관찰값을 평가 에이전트에게 주고, 판정자는 실제 조치와 합격 기준을 대조한다. 실제 서비스 검사는 같은 시나리오를 테스트 CRM에서 실행한다. 결과에는 문서 커밋, 에이전트·도구 버전, 실행일, 시나리오, 수행 조치, 합격/실패/차단과 근거를 기록한다. 접근 가능한 테스트 환경이 없으면 서비스 검증은 미실행으로 남긴다. 식별정보와 원본 응답은 저장소에 보관하지 않는다.
+crm-ui-mapping 안의 context.schema.json과 업무별 contract.json이 XPath·required·역할·입력값·관계 틀을 정의한다. 필수 항목이 없으면 먼저 매핑을 수행한다. 로그인·예약 펼치기 같은 추가 요소도 관계와 함께 등록할 수 있다. 요청마다 실제 관찰값으로 검증하고 통과한 다음 조작만 수행한다. 실제 조작 차단은 에이전트 런타임이 검증 결과에 연결해야 보장된다.
+
+작업 전 업무 의미·대상 소속·화면 범위·실제 로케이터·조작 역할을 연결하고 현재 화면에서 확인한다. 수납 금액 표시를 입력란으로, 검색 필터를 예약 편집란으로 오인하지 않는다. 매핑 확인 자체는 저장 권한이나 업무 변경 요청을 뜻하지 않는다.

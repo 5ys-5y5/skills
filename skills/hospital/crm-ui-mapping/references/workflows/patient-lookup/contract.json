@@ -1,0 +1,17 @@
+{
+  "workflow": "patient-lookup",
+  "operations": {
+    "lookup": {
+      "fields": {
+        "patient.identity": "read",
+        "patient.details": "read"
+      },
+      "writes": false,
+      "input_schemas": {}
+    }
+  },
+  "result_bindings": {
+    "patient_id": "patient.identity",
+    "details": "patient.details"
+  }
+}

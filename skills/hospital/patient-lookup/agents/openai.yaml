@@ -1,3 +1,0 @@
-interface:
-  display_name: "환자 조회"
-  short_description: "CRM에서 환자를 식별하고 요청한 등록 정보와 예약·내원 상태를 조회합니다"

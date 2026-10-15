@@ -1,0 +1,90 @@
+{
+  "workflow": "appointment-manage",
+  "operations": {
+    "lookup": {
+      "fields": {
+        "patient.identity": "read",
+        "appointment.identity": "read",
+        "appointment.date": "read",
+        "appointment.status": "read"
+      },
+      "writes": false,
+      "input_schemas": {},
+      "result_required": [
+        "appointment_id",
+        "patient_id"
+      ]
+    },
+    "create": {
+      "fields": {
+        "patient.identity": "read",
+        "appointment.date": "input",
+        "appointment.submit": "action",
+        "appointment.result": "read"
+      },
+      "writes": true,
+      "input_schemas": {
+        "appointment.date": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "result_required": [
+        "appointment_id",
+        "patient_id"
+      ]
+    },
+    "update": {
+      "fields": {
+        "patient.identity": "read",
+        "appointment.identity": "read",
+        "appointment.date": "input",
+        "appointment.submit": "action",
+        "appointment.result": "read"
+      },
+      "writes": true,
+      "input_schemas": {
+        "appointment.date": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "result_required": [
+        "appointment_id",
+        "patient_id"
+      ]
+    },
+    "cancel": {
+      "fields": {
+        "patient.identity": "read",
+        "appointment.identity": "read",
+        "appointment.cancel": "action",
+        "appointment.result": "read"
+      },
+      "writes": true,
+      "input_schemas": {},
+      "result_required": [
+        "appointment_id",
+        "patient_id"
+      ]
+    },
+    "availability": {
+      "fields": {
+        "availability.date": "read",
+        "availability.slots": "read"
+      },
+      "writes": false,
+      "input_schemas": {},
+      "result_required": [
+        "available_slots"
+      ]
+    }
+  },
+  "result_bindings": {
+    "appointment_id": "appointment.identity",
+    "patient_id": "patient.identity",
+    "date": "appointment.date",
+    "status": "appointment.status",
+    "available_slots": "availability.slots"
+  }
+}

@@ -4,11 +4,7 @@
 
 | 경로 | 종류·선택 조건 |
 |---|---|
+| [hospital/crm-ui-mapping/SKILL.md](hospital/crm-ui-mapping/SKILL.md) | 모든 병원 CRM 업무의 진입점. XPath·필수값·관계 선행 검증 후 해당 업무 자료만 로딩 |
 | [engineering/chrome-devtools/SKILL.md](engineering/chrome-devtools/SKILL.md) | 공식 외부 MCP 사용 문서. Chrome DevTools MCP를 사용할 의사와 권한이 있고 서버 연결이 준비된 경우 |
-| [hospital/patient-lookup/SKILL.md](hospital/patient-lookup/SKILL.md) | 환자 검색·정보 조회 |
-| [hospital/appointment-manage/SKILL.md](hospital/appointment-manage/SKILL.md) | 가용 시간·예약 조회, 신규·변경·취소 |
-| [hospital/visit-check-in/SKILL.md](hospital/visit-check-in/SKILL.md) | 당일 도착·접수 |
-| [hospital/billing-lookup/SKILL.md](hospital/billing-lookup/SKILL.md) | 진료비·미수금·기발급 영수증 조회 |
-| [hospital/contact-record/SKILL.md](hospital/contact-record/SKILL.md) | 상담 기록·직원 콜백 요청 |
 
 이 문서는 경로 안내이며 도구 프로토콜이 아니다. MCP 연결이 없는 환경에서 문서를 읽었다는 이유로 서버를 만들거나 도구를 호출 가능한 것으로 가정하지 않는다. 일반 URL 요청을 병원 업무로 억지로 분류하지 않는다. 필요한 접속 정보와 권한은 호출한 에이전트가 자신의 환경에서 확인한다.

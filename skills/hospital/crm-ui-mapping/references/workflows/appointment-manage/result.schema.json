@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "appointment-manage information",
+  "type": "object",
+  "properties": {
+    "appointment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "patient_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "date": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "available_slots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true,
+  "anyOf": [
+    {
+      "required": [
+        "appointment_id",
+        "patient_id"
+      ]
+    },
+    {
+      "required": [
+        "available_slots"
+      ]
+    }
+  ]
+}

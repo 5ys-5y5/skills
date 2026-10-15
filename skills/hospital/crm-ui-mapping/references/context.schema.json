@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Hospital mapping and per-call evidence",
+  "type": "object",
+  "required": [
+    "profile",
+    "request"
+  ],
+  "properties": {
+    "profile": {
+      "type": "object",
+      "required": [
+        "context",
+        "fields"
+      ],
+      "properties": {
+        "context": {
+          "type": "object",
+          "required": [
+            "hospital",
+            "crm",
+            "revision"
+          ],
+          "properties": {
+            "hospital": {
+              "type": "string",
+              "minLength": 1
+            },
+            "crm": {
+              "type": "string",
+              "minLength": 1
+            },
+            "revision": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": true
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "xpath",
+              "required",
+              "role",
+              "description",
+              "scope"
+            ],
+            "properties": {
+              "xpath": {
+                "type": "string"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "role": {
+                "enum": [
+                  "read",
+                  "input",
+                  "action",
+                  "container"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "scope": {
+                "type": "string",
+                "minLength": 1
+              },
+              "scope_field": {
+                "type": "string",
+                "minLength": 1
+              },
+              "depends_on": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "effect": {
+                "enum": [
+                  "navigation",
+                  "filter",
+                  "record"
+                ]
+              },
+              "value_required": {
+                "type": "boolean"
+              },
+              "result_key": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "request": {
+      "type": "object",
+      "required": [
+        "id",
+        "workflow",
+        "operation",
+        "context"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "workflow": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "context": {
+          "type": "object",
+          "required": [
+            "hospital",
+            "crm",
+            "revision"
+          ],
+          "properties": {
+            "hospital": {
+              "type": "string",
+              "minLength": 1
+            },
+            "crm": {
+              "type": "string",
+              "minLength": 1
+            },
+            "revision": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": true
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "action": {
+          "enum": [
+            "read",
+            "click",
+            "fill",
+            "select"
+          ]
+        },
+        "values": {
+          "type": "object"
+        },
+        "result_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "request_id",
+        "context",
+        "observed_at",
+        "fields",
+        "satisfied"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string"
+        },
+        "context": {
+          "type": "object",
+          "required": [
+            "hospital",
+            "crm",
+            "revision"
+          ],
+          "properties": {
+            "hospital": {
+              "type": "string",
+              "minLength": 1
+            },
+            "crm": {
+              "type": "string",
+              "minLength": 1
+            },
+            "revision": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": true
+        },
+        "observed_at": {
+          "type": "string"
+        },
+        "satisfied": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "matches",
+              "visible",
+              "semantic_confirmed",
+              "owner_confirmed"
+            ],
+            "properties": {
+              "matches": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "visible": {
+                "type": "boolean"
+              },
+              "semantic_confirmed": {
+                "type": "boolean"
+              },
+              "owner_confirmed": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "result": {
+      "type": "object"
+    }
+  }
+}

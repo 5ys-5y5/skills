@@ -1,0 +1,3 @@
+interface:
+  display_name: "병원 CRM 업무"
+  short_description: "병원 CRM 업무의 XPath·필수값·선행 관계를 검증하고 해당 업무를 처리합니다"

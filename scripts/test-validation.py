@@ -41,13 +41,13 @@ class ValidationTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_wrong_bucket_is_rejected(self):
-        source = self.repo / 'skills/hospital/patient-lookup'
-        source.rename(self.repo / 'skills/patient-lookup')
+        source = self.repo / 'skills/hospital/crm-ui-mapping'
+        source.rename(self.repo / 'skills/crm-ui-mapping')
         self.assert_rejected('Expected skills/<bucket>/<name>/SKILL.md:')
 
     def test_standard_yaml_forms_are_accepted(self):
-        path = self.repo / 'skills/hospital/patient-lookup/SKILL.md'
-        path.write_text('---\nname: "patient-lookup"\ndescription: >-\n'
+        path = self.repo / 'skills/hospital/crm-ui-mapping/SKILL.md'
+        path.write_text('---\nname: "crm-ui-mapping"\ndescription: >-\n'
                         '  Find patients when a user requests\n  patient information.\n'
                         'compatibility: Requires an authorized CRM session.\n'
                         'metadata:\n  author: "Personal"\n---\n# Lookup\n')
@@ -55,13 +55,13 @@ class ValidationTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_invalid_standard_metadata_is_rejected(self):
-        path = self.repo / 'skills/hospital/patient-lookup/SKILL.md'
+        path = self.repo / 'skills/hospital/crm-ui-mapping/SKILL.md'
         cases = [
-            ('name: patient-lookup\ndescription: true', 'description'),
-            ('name: patient-lookup\ndescription: ' + 'x' * 1025, 'description'),
-            ('name: patient-lookup\ndescription: Lookup\nmetadata:\n  version: 1', 'metadata'),
+            ('name: crm-ui-mapping\ndescription: true', 'description'),
+            ('name: crm-ui-mapping\ndescription: ' + 'x' * 1025, 'description'),
+            ('name: crm-ui-mapping\ndescription: Lookup\nmetadata:\n  version: 1', 'metadata'),
             ('name: other-name\ndescription: Lookup', 'Folder/name mismatch'),
-            ('name: patient-lookup\ndescription: Lookup\ncompatibility: ' + 'x' * 501, 'compatibility'),
+            ('name: crm-ui-mapping\ndescription: Lookup\ncompatibility: ' + 'x' * 501, 'compatibility'),
         ]
         for header, reason in cases:
             with self.subTest(reason=reason):
@@ -97,14 +97,14 @@ class ValidationTests(unittest.TestCase):
         self.assertIn('Marketplace must reference the local plugin', result.stderr)
 
     def test_malformed_metadata_is_rejected(self):
-        path = self.repo / 'skills/hospital/patient-lookup/agents/openai.yaml'
+        path = self.repo / 'skills/hospital/crm-ui-mapping/agents/openai.yaml'
         path.write_text('interface:\n  display_nam: "Wrong key"\n')
         result = self.validate('--packaging')
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('Invalid UI metadata', result.stderr)
 
     def test_skill_references_cannot_escape_owner(self):
-        path = self.repo / 'skills/hospital/patient-lookup/SKILL.md'
+        path = self.repo / 'skills/hospital/crm-ui-mapping/SKILL.md'
         path.write_text(path.read_text() + '\n[other skill](../billing-lookup/SKILL.md)\n')
         self.assert_rejected('Missing or escaping file:')
 

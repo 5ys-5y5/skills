@@ -24,3 +24,17 @@ Vercel `skills@1.7.2` found all 6 skills with `add <local-path> --list`, both in
 - CRM/MCP task execution: not performed; the required test service, tools and permissions were not provisioned by this work.
 
 For later runtime tests, record the runtime version, external skill's exact source commit and hashes, discovery output, initial metadata disclosure, model-selected and user-selected activation, resource-read trace, missing-tool behavior, and observed task result. Report file checks, model behavior and real service execution separately.
+
+## Operational mapping revision (2026-10-15)
+
+Added crm-ui-mapping and per-task UI mapping references for hospital workflows. Hospital test scenarios were moved to .agents/scenarios/hospital, outside the distributable skill directories. Runtime instructions apply to authorized actual CRM work and do not require a synthetic environment.
+
+A separate agent read the current mapping, billing and appointment instructions and evaluated four supplied situations without service access: payment input versus balance display, search date versus appointment edit date, ambiguous Save buttons in a mapping-only request, and an authorized production lookup. Its decisions preserved record scope and action meaning, left unconfirmed mappings unresolved, did not authorize writes for mapping-only work, and did not require a synthetic environment for production reads. This is an instruction-behavior assessment, not a browser or CRM execution result.
+
+## Mandatory prerequisite revision (2026-10-15)
+
+Hospital now exposes one Agent Skills entrypoint, crm-ui-mapping. Five former independent task skills are deferred procedure resources under that skill. The repository has two discoverable skills including Chrome DevTools; Vercel skills@1.7.2 listed exactly those two.
+
+Added a portable mapping/request/evidence JSON Schema, a blank profile template, per-workflow operation/input contracts and result schemas, and a stdin-only validator. Actual hospital XPath mappings, credentials and records remain caller-owned. The mapping/action/result phases distinguish missing mappings, per-action readiness and result shape. The validator checks declared evidence; a runtime must supply truthful browser observations and bind its tool dispatcher to the result for enforced action blocking.
+
+Repository validation tests (12) and hospital gate tests (20) passed. Gate cases include missing XPath, wrong context, stale request evidence, repeated elements, incorrect semantics, missing input values, task input types, transitive prerequisites, cycles, scope roles, requested result bindings and extensible result fields. Independent document review identified direct-child bypass ambiguity and overbroad narrow-query requirements; the procedures now restate the gate and narrow queries use requested result bindings. Official skills-ref accepted both entrypoints, and the bundled JSON Schemas passed Draft 2020-12 schema checks. No actual CRM/browser action or custom runtime dispatcher integration was exercised.

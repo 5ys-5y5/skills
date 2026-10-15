@@ -1,0 +1,33 @@
+{
+  "workflow": "visit-check-in",
+  "operations": {
+    "arrive": {
+      "fields": {
+        "patient.identity": "read",
+        "visit.identity": "read",
+        "visit.status": "read",
+        "visit.arrive": "action",
+        "visit.result": "read"
+      },
+      "writes": true,
+      "input_schemas": {}
+    },
+    "check-in": {
+      "fields": {
+        "patient.identity": "read",
+        "visit.identity": "read",
+        "visit.status": "read",
+        "visit.submit": "action",
+        "visit.result": "read"
+      },
+      "writes": true,
+      "input_schemas": {}
+    }
+  },
+  "result_bindings": {
+    "visit_id": "visit.identity",
+    "patient_id": "patient.identity",
+    "date": "visit.date",
+    "status": "visit.status"
+  }
+}

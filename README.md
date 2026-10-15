@@ -11,14 +11,14 @@
 npx skills@latest add . --list
 
 # GitHub에 게시된 개별 스킬 설치
-npx skills@latest add https://github.com/5ys-5y5/skills --skill patient-lookup
+npx skills@latest add https://github.com/5ys-5y5/skills --skill crm-ui-mapping
 ```
 
 자체 런타임은 [공식 클라이언트 가이드](https://agentskills.io/client-implementation/adding-skills-support)에 따라 일반적인 스킬 디렉터리를 발견하고 YAML을 파싱한다. 처음에는 이름·설명을 모델에 제공하며, 모델 판단 또는 사용자 명시적 선택으로 활성화한 본문과 필요한 자료만 단계적으로 읽는다. 스킬 루트를 기준으로 자료 경로를 해석하고, 파일 읽기와 스크립트 실행은 구분한다. 외부 규격 준수 스킬에 전용 메타데이터나 특정 호출 명령을 요구하지 않는다. 이름 충돌·잘못된 파일을 진단하고, 도구·인증·실행 환경이 없으면 제약을 명확히 알린다. 활성화된 스킬의 지침은 대화 압축 후에도 보존하거나 다시 로딩한다.
 
 ## 선택적 제품 설치와 표시 설정
 
-제품별 부가 기능으로 `5ys` marketplace의 `5ys-skills` 플러그인이 스킬 6개를 묶는다. `.claude-plugin/plugin.json`은 이 선택적 패키지의 기준이며 표준 스킬 로딩의 필수 조건이 아니다. `skills/README.md`는 문서 탐색용이다.
+제품별 부가 기능으로 `5ys` marketplace의 `5ys-skills` 플러그인이 실제 스킬 폴더를 묶는다. `.claude-plugin/plugin.json`은 이 선택적 패키지의 기준이며 표준 스킬 로딩의 필수 조건이 아니다. `skills/README.md`는 문서 탐색용이다.
 
 현재 로컬 변경을 시험할 때는 저장소 루트에서 실행한다.
 
@@ -32,7 +32,7 @@ claude plugin marketplace add .
 claude plugin install 5ys-skills@5ys
 ```
 
-GitHub에 변경을 푸시한 뒤에는 첫 번째 명령의 `.` 대신 `5ys-5y5/skills`를 사용할 수 있다. 설치 후 새 세션에서 스킬 목록에 6개 항목이 나타나는지 확인하고, 필요한 스킬 이름과 업무 요청을 전달한다. 이 문서는 설치 방법을 제공하며 사용자 환경에 플러그인을 자동 설치하지 않는다.
+GitHub에 변경을 푸시한 뒤에는 첫 번째 명령의 `.` 대신 `5ys-5y5/skills`를 사용할 수 있다. 설치 후 새 세션에서 스킬 목록에 등록된 항목이 나타나는지 확인하고, 필요한 스킬 이름과 업무 요청을 전달한다. 이 문서는 설치 방법을 제공하며 사용자 환경에 플러그인을 자동 설치하지 않는다.
 
 기존에 같은 스킬을 복사하거나 링크해 설치했다면 설치 방식을 하나로 정리한다. 플러그인과 수동 설치를 함께 사용하면 중복될 수 있다. 다른 에이전트에서는 각 항목 폴더 전체를 해당 환경의 지원 설치 방식으로 등록한다. 저장소를 clone하거나 경로 안내 문서를 읽는 것만으로 모든 스킬이 자동 등록되지는 않는다.
 
@@ -70,14 +70,17 @@ skills/
         validation.md
   hospital/
     README.md
-    patient-lookup/SKILL.md
-    appointment-manage/SKILL.md
-    visit-check-in/SKILL.md
-    billing-lookup/SKILL.md
-    contact-record/SKILL.md
+    crm-ui-mapping/
+      SKILL.md
+      assets/profile.template.json
+      references/context.schema.json
+      references/prerequisites.md
+      references/workflows/
+      scripts/validate-context.py
+      scripts/requirements.txt
 ```
 
-병원 업무의 각 항목 폴더에도 `agents/openai.yaml`과 `references/validation.md`를 둔다.
+병원 영역은 `crm-ui-mapping` 하나의 표준 스킬로 제공한다. 하위 업무는 그 안의 references/workflows 아래에 본문·contract.json·result.schema.json으로 묶는다. profile의 필수 XPath와 관계 검증 후 선택한 업무만 읽고, 실제 조작마다 현재 관찰값·필수 입력값을 검증한다. 병원별 매핑과 실제 업무 데이터는 호출 에이전트가 보관하며 이 저장소에는 틀만 둔다. 제품 표시 설정은 선택 사항이다.
 
 시작 문서는 [skills/README.md](skills/README.md)다. 안내용 README는 스킬이 아니며, 각 실제 스킬의 SKILL.md와 필요한 자료를 읽는다. `skills/<분류>/<이름>`은 이 저장소의 구성 규칙이고 외부 스킬이나 소비 런타임에 강제하는 경로 규격이 아니다.
 
@@ -89,6 +92,8 @@ python3 -m venv .venv
 bash scripts/list-skills.sh
 .venv/bin/python scripts/validate-skills.py
 .venv/bin/python scripts/test-validation.py
+.venv/bin/python -m pip install -r skills/hospital/crm-ui-mapping/scripts/requirements.txt
+.venv/bin/python scripts/test-hospital-gate.py
 # 제품별 패키지 유지보수 시에만 추가 검사
 .venv/bin/python scripts/validate-skills.py --packaging
 ```
@@ -99,7 +104,7 @@ bash scripts/list-skills.sh
 
 이번 점검의 실제 결과와 미검증 항목은 [호환성 검증 기록](.agents/compatibility.md)에 구분해 두었다.
 
-각 분류 README에서 항목별 업무 검증 시나리오로 이동할 수 있다. 실제 CRM/MCP 시험은 허가된 테스트 환경에서 수행하고, 문서 검사·에이전트 판단 검사·서비스 실행 결과를 구분한다. 실제 환자 데이터와 인증 정보는 시험 자료나 Git 기록에 넣지 않는다.
+병원 유지보수 시나리오는 `.agents/scenarios/hospital/`에 보관하며 배포되는 스킬 폴더에 포함하지 않는다. 실제 CRM/MCP 시험은 허가된 테스트 환경에서 수행하고, 문서 검사·에이전트 판단 검사·서비스 실행 결과를 구분한다. 실제 환자 데이터와 인증 정보는 시험 자료나 Git 기록에 넣지 않는다.
 
 ## 업데이트
 
@@ -110,3 +115,5 @@ bash scripts/list-skills.sh
 Chrome DevTools 항목은 연결된 MCP 서버를 사용하는 공식 문서다. 서버 제공·자동 설치를 뜻하지 않는다. 병원 업무 스킬은 특정 서비스 설정 규격이나 특정 MCP를 요구하지 않고 실행 환경에서 제공하는 권한·접속 정보·도구를 사용한다.
 
 .agents/는 저장소 유지보수 규칙이다. 서비스의 설정·인증·캐시·문서 공급 구현은 이 저장소에 포함하지 않는다. 실제 업무 검증 완료를 뜻하지 않으며 자체 문서에 별도 공개 재배포 라이선스를 부여하지 않았다.
+
+병원 진입점·하위 자료 구조는 표준의 단계적 로딩을 사용한다. 표준에는 스킬 간 자동 선행 실행이나 README 우선 실행 규정이 없다. 따라서 하위 업무를 별도 SKILL.md로 광고하지 않는다. 필수 실행 차단을 보장하려면 소비 런타임이 실제 조작 전에 검증 결과를 연결해야 한다. 검증 스크립트만으로 다른 런타임의 도구 호출을 가로챌 수는 없다.

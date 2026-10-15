@@ -1,0 +1,61 @@
+{
+  "workflow": "contact-record",
+  "operations": {
+    "create": {
+      "fields": {
+        "contact.body": "input",
+        "contact.submit": "action",
+        "contact.identity": "read"
+      },
+      "writes": true,
+      "input_schemas": {
+        "contact.body": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "update": {
+      "fields": {
+        "contact.identity": "read",
+        "contact.body": "input",
+        "contact.submit": "action"
+      },
+      "writes": true,
+      "input_schemas": {
+        "contact.body": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "callback": {
+      "fields": {
+        "contact.body": "input",
+        "callback.recipient": "input",
+        "callback.status": "read",
+        "callback.submit": "action",
+        "contact.identity": "read"
+      },
+      "writes": true,
+      "input_schemas": {
+        "contact.body": {
+          "type": "string",
+          "minLength": 1
+        },
+        "callback.recipient": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "result_bindings": {
+        "status": "callback.status"
+      }
+    }
+  },
+  "result_bindings": {
+    "record_id": "contact.identity",
+    "content": "contact.body",
+    "status": "contact.status"
+  }
+}

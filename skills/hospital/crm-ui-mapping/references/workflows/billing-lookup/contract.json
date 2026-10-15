@@ -1,0 +1,28 @@
+{
+  "workflow": "billing-lookup",
+  "operations": {
+    "lookup": {
+      "fields": {
+        "patient.identity": "read",
+        "billing.identity": "read"
+      },
+      "writes": false,
+      "input_schemas": {},
+      "optional_fields": {
+        "billing.total": "read",
+        "billing.paid": "read",
+        "billing.balance": "read",
+        "billing.status": "read"
+      }
+    }
+  },
+  "result_bindings": {
+    "patient_id": "patient.identity",
+    "bill_id": "billing.identity",
+    "total": "billing.total",
+    "paid": "billing.paid",
+    "balance": "billing.balance",
+    "currency": "billing.currency",
+    "status": "billing.status"
+  }
+}

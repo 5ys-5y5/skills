@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "visit-check-in information",
+  "type": "object",
+  "properties": {
+    "visit_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "patient_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "date": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "visit_id",
+    "patient_id",
+    "date",
+    "status"
+  ],
+  "additionalProperties": true
+}
