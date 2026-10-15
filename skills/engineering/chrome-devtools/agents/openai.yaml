@@ -1,0 +1,3 @@
+interface:
+  display_name: "Chrome DevTools"
+  short_description: "이미 연결되고 사용이 허가된 Chrome DevTools MCP의 공식 사용 안내"

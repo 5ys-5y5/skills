@@ -1,1 +1,4 @@
 .DS_Store
+/graft/
+/.venv/
+__pycache__/

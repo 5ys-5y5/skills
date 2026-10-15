@@ -1,0 +1,3 @@
+interface:
+  display_name: "내원·접수"
+  short_description: "당일 진료 건의 기존 상태를 확인하고 요청한 도착 확인이나 접수를 처리합니다"

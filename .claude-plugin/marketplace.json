@@ -1,0 +1,12 @@
+{
+  "name": "5ys",
+  "description": "Portable hospital workflow skills and Chrome DevTools MCP usage guidance.",
+  "owner": { "name": "5ys-5y5" },
+  "plugins": [
+    {
+      "name": "5ys-skills",
+      "source": "./",
+      "description": "Portable hospital workflows and Chrome DevTools MCP usage guidance."
+    }
+  ]
+}

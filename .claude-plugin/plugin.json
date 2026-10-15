@@ -1,0 +1,15 @@
+{
+  "name": "5ys-skills",
+  "version": "0.1.0",
+  "description": "Portable hospital workflows and Chrome DevTools MCP usage guidance.",
+  "author": { "name": "5ys-5y5" },
+  "repository": "https://github.com/5ys-5y5/skills",
+  "skills": [
+    "./skills/engineering/chrome-devtools",
+    "./skills/hospital/appointment-manage",
+    "./skills/hospital/billing-lookup",
+    "./skills/hospital/contact-record",
+    "./skills/hospital/patient-lookup",
+    "./skills/hospital/visit-check-in"
+  ]
+}

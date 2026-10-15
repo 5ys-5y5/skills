@@ -1,0 +1,22 @@
+name: Validate skills
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: bash scripts/list-skills.sh
+      - run: python3 -m pip install -r scripts/requirements.txt
+      - run: python3 scripts/validate-skills.py
+      - run: python3 scripts/validate-skills.py --packaging
+      - run: python3 scripts/test-validation.py
