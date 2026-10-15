@@ -1,0 +1,43 @@
+{
+  "name": "chrome-devtools",
+  "origin": "external-upstream",
+  "repository": "https://github.com/ChromeDevTools/chrome-devtools-mcp",
+  "upstreamTag": "chrome-devtools-mcp-v1.10.1",
+  "upstreamCommit": "e52c6b59b476c5e04d8dd9fd4bd017ba3b3d65df",
+  "mcpPackage": "chrome-devtools-mcp",
+  "mcpVersion": "1.10.1",
+  "license": "Apache-2.0",
+  "localModifications": true,
+  "files": [
+    {
+      "path": "references/LICENSE.txt",
+      "upstreamPath": "LICENSE",
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+      "bytes": 11357
+    },
+    {
+      "path": "SKILL.md",
+      "upstreamPath": "skills/chrome-devtools/SKILL.md",
+      "sha256": "c590cd0016fc70341ef66a3a3663db637a8dea72803bf36644a0e8fde86a5590",
+      "bytes": 5093,
+      "upstreamSha256": "dc9b3cd25a8f05f366e2979d1d598bb0122d2e58431fd961e20cd68e7392e030"
+    },
+    {
+      "path": "references/tool-reference.md",
+      "upstreamPath": "docs/tool-reference.md",
+      "sha256": "aeafb5109294be507e89b1707cadaa9d611463df063bf67cc885f82e44aac4f5",
+      "bytes": 36837
+    },
+    {
+      "path": "references/troubleshooting.md",
+      "upstreamPath": "docs/troubleshooting.md",
+      "sha256": "5243bcdc13cfae8610be4bf5ea1dc6b4a0ef0f0c614625e0f5e4b6aa3bafebac",
+      "bytes": 8973
+    }
+  ],
+  "kind": "mcp-usage-documentation",
+  "requires": "An available Chrome DevTools MCP server which the invoking agent is authorized and intends to use; documentation does not provision a server.",
+  "checkedOn": "2026-10-15",
+  "maintenance": "When adopting an upstream release, resolve its exact commit, compare the official files, preserve attribution/license, and update this source record. Updating documents does not update or provision an MCP server.",
+  "adaptation": "Added only the delimited MCP server prerequisite notice after the original frontmatter. Removing that notice restores the original upstream SKILL.md bytes."
+}

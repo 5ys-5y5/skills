@@ -4,6 +4,8 @@ Maintain portable task knowledge. Read [.agents/writing-skills.md](.agents/writi
 
 Do not define a consuming application's configuration keys, APIs, storage, authentication protocol, runtime graph, deployment, or cache policy here. The invoking agent resolves those details in its own environment.
 
-Keep first-party task skills in skills/ and upstream MCP usage documentation in mcp/. Preserve upstream bytes, attribution, and licenses; put local prerequisite explanations in a separate README. A document does not provide an MCP server or authorize its installation.
+Keep every item under skills/<bucket>/<name>/SKILL.md. The skills/SKILL.md entrypoint and bucket README files link to these documents. Mark an MCP dependency in the owning document; do not create a separate mcp tree. A document does not provide an MCP server or authorize its installation.
+
+Keep source versions and update instructions inside the owning folder. Do not create a second root lock or update inventory. Preserve upstream attribution and license; record local prerequisite notices as adaptations. Use scripts/list-skills.sh to derive the document paths and scripts/validate-skills.py to check local files without an external service.
 
 Check local links, frontmatter, source hashes, and realistic task behavior after changes. Do not claim that document validation proves a successful real service execution. Do not add credentials or patient records.

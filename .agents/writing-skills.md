@@ -8,4 +8,4 @@ Keep domain distinctions that affect correctness: patient ownership, existing ve
 
 Do not require an MCP server for a task that can use another available authorized browser or integration. An upstream MCP guide may require its particular server; label that dependency before offering the guide.
 
-Preserve upstream source documents. Change local explanations separately and record the upstream version and file hashes. Do not copy all tool schemas into a new first-party skill.
+Preserve upstream instructions. Keep local prerequisite additions explicitly delimited and record both the original upstream hash and the resulting local hash in the owning folder's references/source.json. Verify that removing the declared addition restores the upstream bytes. Do not copy all tool schemas into a new first-party skill.

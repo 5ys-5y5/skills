@@ -2,6 +2,14 @@
 name: chrome-devtools
 description: Uses Chrome DevTools via MCP for efficient debugging, troubleshooting and browser automation. Use when debugging web pages, automating browser interactions, analyzing performance, or inspecting network requests. This skill does not apply to `--slim` mode (MCP configuration).
 ---
+<!-- local-prerequisite:start -->
+## MCP server prerequisite
+
+This is an imported official Chrome DevTools MCP usage guide, not a server implementation. Use it only when you intend and are authorized to use a connected Chrome DevTools MCP server and its tools are actually available. Reading this file does not install, start, configure, or authorize a server. If the connection is missing, identify that prerequisite or use another available suitable tool; do not invent a server or callable tools.
+
+Source version, license, original hashes, and update instructions are recorded in [references/source.json](references/source.json). The prerequisite notice is a local addition; the official instructions below are otherwise preserved.
+<!-- local-prerequisite:end -->
+
 
 ## Core Concepts
 
